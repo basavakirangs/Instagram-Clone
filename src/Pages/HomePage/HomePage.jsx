@@ -1,7 +1,23 @@
+import { Box, Container, Flex } from "@chakra-ui/react";
+import FeedPosts from "../../components/FeedPosts/FeedPosts";
+import SuggestedUSers from "../../components/SuggestedUsers/SuggestedUsers";
+
 export default function HomePage() {
   return (
-    <>
-      <h1>Home Page</h1>
-    </>
+    <Container maxW={"container.lg"}>
+      <Flex gap={20}>
+        <Box flex={2} py={10}>
+          <FeedPosts />
+        </Box>
+        <Box
+          flex={3}
+          mr={20}
+          display={{ base: "none", lg: "block" }}
+          maxW={"300px"}
+        >
+          <SuggestedUSers />
+        </Box>
+      </Flex>
+    </Container>
   );
 }

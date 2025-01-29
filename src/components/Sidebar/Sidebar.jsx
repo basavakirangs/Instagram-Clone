@@ -8,6 +8,7 @@ import {
   SearchLogo,
 } from "../../assets/constants";
 import { AiFillHome } from "react-icons/ai";
+import { BiLogOut } from "react-icons/bi";
 
 export default function Sidebar() {
   const sidebarItems = [
@@ -31,7 +32,7 @@ export default function Sidebar() {
     {
       icon: <Avatar size={"sm"} name="Basavakiran" src="/Profilepic.png" />,
       text: "Profile",
-      link: "basavakirangs",
+      link: "/basavakirangs",
     },
   ];
   return (
@@ -45,7 +46,7 @@ export default function Sidebar() {
       left={0}
       px={{ base: "2", lg: "4" }}
     >
-      <Flex direction={"column"}>
+      <Flex direction={"column"} gap={10} w={"full"} height={"full"}>
         <Link
           to={"/"}
           as={RouterLink}
@@ -61,7 +62,7 @@ export default function Sidebar() {
           p={2}
           display={{ base: "block", lg: "none" }}
           borderRadius={6}
-          _hover={{ bg: "WhiteAlpha.200" }}
+          _hover={{ bg: "whiteAlpha.200" }}
           cursor={"pointer"}
           w={10}
         >
@@ -70,6 +71,7 @@ export default function Sidebar() {
         <Flex direction={"column"} gap={5} cursor={"pointer"}>
           {sidebarItems.map((item, index) => (
             <Tooltip
+              key={index}
               hasArrow
               label={item.text}
               placement="right"
@@ -79,21 +81,47 @@ export default function Sidebar() {
             >
               <Link
                 display={"flex"}
-                top={item.link || null}
+                to={item.link || null}
                 as={RouterLink}
                 alignItems={"center"}
                 gap={4}
-                _hover={{ bg: "WhiteAlpha.400" }}
+                _hover={{ bg: "whiteAlpha.400" }}
                 borderRadius={6}
                 p={2}
-                w={"full"}
+                w={{ base: 10, lg: "full" }}
+                justifyContent={{ base: "center", lg: "flex-start" }}
               >
                 {item.icon}
+                <Box display={{ base: "none", lg: "block" }}>{item.text}</Box>
               </Link>
-              <Box display={{ base: "none", lg: "block" }}>{item.name}</Box>
             </Tooltip>
           ))}
         </Flex>
+        <Tooltip
+          hasArrow
+          label="Logout"
+          placement="right"
+          pl={1}
+          openDelay={500}
+          display={{ base: "block", lg: "none" }}
+        >
+          <Link
+            display={"flex"}
+            to={"/auth"}
+            as={RouterLink}
+            alignItems={"center"}
+            gap={4}
+            _hover={{ bg: "whiteAlpha.400" }}
+            borderRadius={6}
+            p={2}
+            w={{ base: 10, lg: "full" }}
+            mt={"auto"}
+            justifyContent={{ base: "center", lg: "flex-start" }}
+          >
+            <BiLogOut />
+            <Box display={{ base: "none", lg: "block" }}>Logout</Box>
+          </Link>
+        </Tooltip>
       </Flex>
     </Box>
   );
