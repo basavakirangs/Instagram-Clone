@@ -15,7 +15,7 @@ import {
 } from "../../assets/constants";
 import { span } from "framer-motion/client";
 
-export default function PostFooter({ username }) {
+export default function PostFooter({ username, isProfilePage }) {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(1000);
 
@@ -29,7 +29,7 @@ export default function PostFooter({ username }) {
     }
   };
   return (
-    <Box mb={10}>
+    <Box mb={10} marginTop={"auto"}>
       <Flex alignItems={"center"} gap={4} w={"full"} pt={0} pb={2} mt={"4"}>
         <Box onClick={handleLike} cursor={"pointer"} fontSize={18}>
           {!liked ? <NotificationsLogo /> : <UnlikeLogo />}
@@ -41,15 +41,19 @@ export default function PostFooter({ username }) {
       <Text fontWeight={600} fontSize={"sm"}>
         {likes} likes
       </Text>
-      <Text fontSize={"sm"} fontWeight={700}>
-        {username}{" "}
-        <Text as={span} fontWeight={400}>
-          Feeling good
-        </Text>
-      </Text>
-      <Text fontSize={"sm"} color={"gray"}>
-        View all 1,000 comments
-      </Text>
+      {!isProfilePage && (
+        <>
+          <Text fontSize={"sm"} fontWeight={700}>
+            {username}{" "}
+            <Text as={span} fontWeight={400}>
+              Feeling good
+            </Text>
+          </Text>
+          <Text fontSize={"sm"} color={"gray"}>
+            View all 1,000 comments
+          </Text>
+        </>
+      )}
       <Flex
         alignItems={"center"}
         gap={2}
