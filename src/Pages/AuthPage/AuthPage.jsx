@@ -6,10 +6,10 @@ export default function AuthPage() {
     <Flex justifyContent={"center"} alignItems={"center"} minH={"100vh"} px={4}>
       <Container maxW={"container.md"} padding={0}>
         <Flex justifyContent={"center"} alignItems={"center"} gap={10}>
-          <Box display={{ base: "none", lg: "block" }}>
-            <Image src="auth.png" h={650} alt="Phone Img" />
+          <Box display={{ base: "none", md: "block" }}>
+            <Image src="auth.png" alt="Phone Img" />
           </Box>
-          <VStack spacing={4} align={"stretch"}>
+          <VStack spacing={4} align={"stretch"} mt={8}>
             <AuthForm />
             <Box textAlign={"center"}>Get The App</Box>
             <Flex gap={5} justifyContent={"center"}>
