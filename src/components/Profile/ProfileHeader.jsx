@@ -4,10 +4,29 @@ import {
   Button,
   Flex,
   Text,
+  useDisclosure,
   VStack,
 } from "@chakra-ui/react";
+import userProfileStore from "../../Store/userProfileStore";
+import useAuthStore from "../../Store/authStore";
+import EditProfile from "./EditProfile";
+import useFollowUser from "../../Hooks/useFollowuser";
 
 export default function ProfileHeader() {
+  const { userProfile } = userProfileStore();
+  const authUser = useAuthStore((state) => state.user);
+
+  const { isFollowing, isUpdating, handleFollowerUser } = useFollowUser(
+    userProfile?.uid
+  );
+
+  const visitingOwnProfileAndAuth =
+    authUser && authUser.username === userProfile.username;
+
+  const visitingAnotherProfileAndAuth =
+    authUser && authUser.username !== userProfile.username;
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Flex
       gap={{ base: 4, md: 10 }}
@@ -20,7 +39,7 @@ export default function ProfileHeader() {
         alignSelf={"flex-start"}
         mx={"auto"}
       >
-        <Avatar name="basavakiran gs" src="/post1.webp" alt={"profile pic"} />
+        <Avatar src={userProfile.profilePicURL} alt={"profile pic"} />
       </AvatarGroup>
       <VStack alignItems={"start"} gap={2} mx={"auto"} flex={1}>
         <Flex
@@ -30,45 +49,65 @@ export default function ProfileHeader() {
           alignItems={"center"}
           w={"full"}
         >
-          <Text fontSize={{ base: "sm", md: "lg" }}>Basavakiran GS</Text>
-          <Flex gap={4} alignItems={"center"} justifyContent={"center"}>
-            <Button
-              bg={"white"}
-              color={"black"}
-              _hover={{ bg: "whiteAlpha.800" }}
-              size={{ base: "xs", md: "sm" }}
-            >
-              EditProfile
-            </Button>
-          </Flex>
+          <Text fontSize={{ base: "sm", md: "lg" }}>
+            {userProfile.username}
+          </Text>
+          {visitingOwnProfileAndAuth && (
+            <Flex gap={4} alignItems={"center"} justifyContent={"center"}>
+              <Button
+                bg={"white"}
+                color={"black"}
+                _hover={{ bg: "whiteAlpha.800" }}
+                size={{ base: "xs", md: "sm" }}
+                onClick={onOpen}
+              >
+                EditProfile
+              </Button>
+            </Flex>
+          )}
+          {visitingAnotherProfileAndAuth && (
+            <Flex gap={4} alignItems={"center"} justifyContent={"center"}>
+              <Button
+                bg={"blue.500"}
+                color={"white"}
+                _hover={{ bg: "blue.700" }}
+                size={{ base: "xs", md: "sm" }}
+                onClick={handleFollowerUser}
+                isLoading={isUpdating}
+              >
+                {isFollowing ? "Unfollow" : "Follow"}
+              </Button>
+            </Flex>
+          )}
         </Flex>
         <Flex alignItems={"center"} gap={{ base: 2, sm: 4 }}>
           <Text fontSize={{ base: "xs", md: "sm" }}>
             <Text as={"span"} fontWeight={"bold"} mr={1}>
-              4
+              {userProfile.posts.length}
             </Text>
             Posts
           </Text>
           <Text fontSize={{ base: "xs", md: "sm" }}>
             <Text as={"span"} fontWeight={"bold"} mr={1}>
-              137
+              {userProfile.followers.length}
             </Text>
             Followers
           </Text>
           <Text fontSize={{ base: "xs", md: "sm" }}>
             <Text as={"span"} fontWeight={"bold"} mr={1}>
-              262
+              {userProfile.following.length}
             </Text>
             Following
           </Text>
         </Flex>
         <Flex alignItems={"center"} gap={4}>
           <Text fontSize={"sm"} fontWeight={"bold"}>
-            Basavakiran GS
+            {userProfile.fullname}
           </Text>
         </Flex>
-        <Text fontSize={"sm"}> Bio</Text>
+        <Text fontSize={"sm"}> {userProfile.bio}</Text>
       </VStack>
+      {isOpen && <EditProfile isOpen={isOpen} onClose={onClose} />}
     </Flex>
   );
 }
