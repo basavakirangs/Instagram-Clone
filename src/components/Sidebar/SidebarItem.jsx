@@ -1,7 +1,17 @@
+import Create from "./Create";
+import Home from "./Home";
+import Notifications from "./Notifications";
+import Profile from "./Profile";
+import Search from "./Search";
+
 export default function SidebarItems() {
   return (
     <>
-      <h1>Home</h1>
+      <Home />
+      <Search />
+      <Notifications />
+      <Create />
+      <Profile />
     </>
   );
 }

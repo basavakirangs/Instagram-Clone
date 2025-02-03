@@ -22,9 +22,7 @@ export default function useFollowUser(userId) {
         following: isFollowing ? arrayRemove(userId) : arrayUnion(userId),
       });
       await updateDoc(userToFollowOrUnFollowRef, {
-        followers: isFollowing
-          ? arrayRemove.apply(user.uid)
-          : arrayUnion(user.uid),
+        followers: isFollowing ? arrayRemove(user.uid) : arrayUnion(user.uid),
       });
 
       if (isFollowing) {
@@ -32,10 +30,16 @@ export default function useFollowUser(userId) {
           ...user,
           following: user.following.filter((uid) => uid !== userId),
         });
-        setUserProfile({
-          ...userProfile,
-          followers: userProfile.followers.filter((uid) => uid !== user.uid),
-        });
+        if (userProfile && userProfile.uid !== user.uid)
+          setUserProfile({
+            ...userProfile,
+            followers: userProfile.followers.filter((uid) => uid !== user.uid),
+          });
+        if (userProfile && userProfile.uid === user.uid)
+          setUserProfile({
+            ...userProfile,
+            following: userProfile.following.filter((uid) => uid !== userId),
+          });
 
         localStorage.setItem(
           "user-info",
@@ -49,10 +53,16 @@ export default function useFollowUser(userId) {
           ...user,
           following: [...user.following, userId],
         });
-        setUserProfile({
-          ...userProfile,
-          followers: [...userProfile.followers, user.uid],
-        });
+        if (userProfile && userProfile.uid !== user.uid)
+          setUserProfile({
+            ...userProfile,
+            followers: [...userProfile.followers, user.uid],
+          });
+        if (userProfile && userProfile.uid === user.uid)
+          setUserProfile({
+            ...user,
+            following: [...user.following, userId],
+          });
         localStorage.setItem(
           "user-info",
           JSON.stringify({
