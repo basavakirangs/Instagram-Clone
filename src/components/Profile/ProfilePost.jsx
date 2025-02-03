@@ -17,8 +17,9 @@ import {
 import { AiFillHeart } from "react-icons/ai";
 import { FaComment } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import Comment from "../Comment/Comment";
 import PostFooter from "../FeedPosts/PostFooter";
+import Comment from "../Comment/Comment";
+import Caption from "../Comment/Caption";
 import userProfileStore from "../../Store/userProfileStore";
 import useAuthStore from "../../Store/authStore";
 import useShowToast from "../../Hooks/useShowToast";
@@ -35,7 +36,7 @@ export default function ProfilePost({ post }) {
   const showToast = useShowToast();
   const [isDeleting, setIsDeleting] = useState(false);
   const deletePost = usePostStore((state) => state.deletePost);
-  const deletePostFromProfile = userProfileStore((state) => state.deletePost);
+  const decrementPostsCount = userProfileStore((state) => state.deletePost);
 
   const handleDeletePost = async () => {
     if (!window.confirm("Are you sure you want to delete this post")) return;
@@ -48,7 +49,7 @@ export default function ProfilePost({ post }) {
       await deleteDoc(doc(firestore, "posts", post.id));
       await updateDoc(userRef, { posts: arrayRemove(post.id) });
       deletePost(post.id);
-      deletePostFromProfile(post.id);
+      decrementPostsCount(post.id);
       showToast("Success", "Post deleted successfully", "success");
     } catch (error) {
       showToast("Error", error.message, "error");
@@ -168,15 +169,14 @@ export default function ProfilePost({ post }) {
                   maxH={"350px"}
                   overflowY={"auto"}
                 >
-                  <Comment
-                    createdAt={"12h ago"}
-                    username={"kiran"}
-                    profilePic={"/post1.webp"}
-                    text={"nice pic"}
-                  />
+                  {post.caption && <Caption post={post} />}
+                  {/* Comments */}
+                  {post.comments.map((comment, idx) => (
+                    <Comment key={idx} comment={comment} />
+                  ))}
                 </VStack>
                 <Divider my={4} bg={"gray.800"} />
-                <PostFooter isProfilePage={true} />
+                <PostFooter isProfilePage={true} post={post} />
               </Flex>
             </Flex>
           </ModalBody>
