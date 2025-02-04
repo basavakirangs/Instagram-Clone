@@ -4,22 +4,19 @@ import {
   Flex,
   Skeleton,
   SkeletonCircle,
+  Text,
   VStack,
 } from "@chakra-ui/react";
 import FeedPost from "./FeedPost";
-import { useEffect, useState } from "react";
+import useGetFeedPosts from "../../Hooks/useGetFeedPosts";
 
 export default function FeedPosts() {
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-  }, []);
+  const { isLoading, posts } = useGetFeedPosts();
+
   return (
     <Container maxW={"container.sm"} py={10} px={2}>
       {isLoading &&
-        [0, 1, 2, 3].map((_, idx) => (
+        [0, 1, 2].map((_, idx) => (
           <VStack key={idx} gap={4} alignItems={"flex-start"} mb={10}>
             <Flex gap={2}>
               <SkeletonCircle size={10} />
@@ -29,33 +26,19 @@ export default function FeedPosts() {
               </VStack>
             </Flex>
             <Skeleton w={"full"}>
-              <Box h={"500px"}>content wrapped</Box>
+              <Box h={"400px"}>content wrapped</Box>
             </Skeleton>
           </VStack>
         ))}
-      {!isLoading && (
+      {!isLoading &&
+        posts.length > 0 &&
+        posts.map((post) => <FeedPost key={post.id} post={post} />)}
+      {!isLoading && posts.length === 0 && (
         <>
-          <FeedPost
-            username="basavakiran gs"
-            img="post1.webp"
-            avatar="post1.webp"
-          />
-          <FeedPost
-            username="Kavitha gs"
-            img="post2.webp"
-            avatar="post2.webp"
-          />
-          <FeedPost
-            username="Shreya u gandhi"
-            img="post5.jpg"
-            avatar="post5.jpg"
-          />
-          <FeedPost
-            username="Girish kumar"
-            img="post4.jpeg"
-            avatar="post4.jpeg"
-          />
-          <FeedPost username="Kiran gs" img="post3.webp" avatar="post3.webp" />
+          <Text fontSize={"md"} color={"white"}>
+            No posts to show
+          </Text>
+          <Text color={"red.400"}> Make some!!!!</Text>
         </>
       )}
     </Container>
