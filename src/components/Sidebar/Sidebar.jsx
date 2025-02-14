@@ -1,20 +1,24 @@
-import { Avatar, Box, Button, Flex, Link, Tooltip } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Link,
+  Tooltip,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+} from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import {
-  CreatePostLogo,
   InstagramLogo,
   InstagramMobileLogo,
-  NotificationsLogo,
-  SearchLogo,
+  MoreLogo,
 } from "../../assets/constants";
-import { AiFillHome } from "react-icons/ai";
-import { BiLogOut } from "react-icons/bi";
-import useLogout from "../../Hooks/useLogout";
 import SidebarItems from "./SidebarItem";
+import More from "./More";
+import Logout from "./Logout";
 
 export default function Sidebar() {
-  const { handlelogout, loading } = useLogout();
-
   return (
     <Box
       h={"100vh"}
@@ -26,7 +30,7 @@ export default function Sidebar() {
       left={0}
       px={{ base: "2", lg: "4" }}
     >
-      <Flex direction={"column"} gap={10} w={"full"} height={"full"}>
+      <Flex direction={"column"} gap={8} w={"full"} height={"full"}>
         <Link
           to={"/"}
           as={RouterLink}
@@ -48,39 +52,22 @@ export default function Sidebar() {
         >
           <InstagramMobileLogo />
         </Link>
-        <Flex direction={"column"} gap={5} cursor={"pointer"}>
+        <Flex direction={"column"} gap={4} cursor={"pointer"}>
           <SidebarItems />
         </Flex>
-        <Tooltip
-          hasArrow
-          label="Logout"
-          placement="right"
-          pl={1}
-          openDelay={500}
-          display={{ base: "block", lg: "none" }}
-        >
-          <Flex
-            onClick={handlelogout}
-            alignItems={"center"}
-            gap={4}
-            _hover={{ bg: "whiteAlpha.400" }}
-            borderRadius={6}
-            p={2}
-            w={{ base: 10, lg: "full" }}
-            mt={"auto"}
-            justifyContent={{ base: "center", lg: "flex-start" }}
-          >
-            <BiLogOut />
-            <Button
-              display={{ base: "none", lg: "block" }}
-              variant={"ghost"}
-              _hover={{ bg: "transparent" }}
-              isLoading={loading}
-            >
-              Logout
-            </Button>
-          </Flex>
-        </Tooltip>
+
+        <Box mt={"auto"}>
+          <Menu>
+            <MenuButton>
+              <More />
+            </MenuButton>
+            <MenuList>
+              <MenuItem>
+                <Logout />
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </Box>
       </Flex>
     </Box>
   );

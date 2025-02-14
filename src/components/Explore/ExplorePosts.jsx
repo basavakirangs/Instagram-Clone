@@ -1,16 +1,13 @@
-import { Box, Flex, Grid, Skeleton, Text, VStack } from "@chakra-ui/react";
-import ProfilePost from "./ProfilePost";
-import useGetUserPosts from "../../Hooks/useGetUserPosts";
+import { Box, Grid, Skeleton, Text, VStack } from "@chakra-ui/react";
+import useGetPostsAll from "../../Hooks/useGetPostsAll";
+import ExplorePost from "./ExplorePost";
 
-export default function ProfilePosts() {
-  const { isLoading, posts } = useGetUserPosts();
-
-  const noPostsFound = !isLoading && posts.length === 0;
-  if (noPostsFound) return <NoPostsFound />;
-
+export default function ExplorePosts() {
+  const { posts, isLoading } = useGetPostsAll();
   return (
     <Grid
-      templateColumns={{ sm: "repeat(1, fr)", md: "repeat(3, 1fr)" }}
+      templateColumns={"repeat(3, 1fr)"}
+      templateRows={"repeat(2, fr)"}
       gap={1}
       columnGap={1}
     >
@@ -25,7 +22,7 @@ export default function ProfilePosts() {
       {!isLoading && (
         <>
           {posts.map((post) => (
-            <ProfilePost post={post} key={post.id} />
+            <ExplorePost post={post} key={post.id} />
           ))}
         </>
       )}

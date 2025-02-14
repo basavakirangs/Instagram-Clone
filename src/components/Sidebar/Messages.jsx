@@ -10,15 +10,15 @@ import {
   Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
-import { NotificationsLogo } from "../../assets/constants";
+import { MessagesLogo } from "../../assets/constants";
 
-export default function Notifications() {
+export default function Messages() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
       <Tooltip
         hasArrow
-        label="Notifications"
+        label={"Messages"}
         placement="right"
         ml={1}
         openDelay={500}
@@ -27,15 +27,15 @@ export default function Notifications() {
         <Flex
           alignItems={"center"}
           gap={4}
-          _hover={{ bg: "whiteAlpha.400" }}
           borderRadius={6}
           p={2}
           w={{ base: 10, lg: "full" }}
           justifyContent={{ base: "center", lg: "flex-start" }}
+          _hover={{ bg: "gray.700", borderRadius: 4, textDecoration: "none" }}
           onClick={onOpen}
         >
-          <NotificationsLogo />
-          <Box display={{ base: "none", lg: "block" }}>Notifications</Box>
+          <MessagesLogo size={24} />
+          <Box display={{ base: "none", lg: "block" }}>Messages</Box>
         </Flex>
       </Tooltip>
 
@@ -43,10 +43,10 @@ export default function Notifications() {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Notifications</DrawerHeader>
+          <DrawerHeader>Messages</DrawerHeader>
 
           <DrawerBody>
-            <h1>No Notifications</h1>
+            <h1>No Messages</h1>
           </DrawerBody>
         </DrawerContent>
       </Drawer>
