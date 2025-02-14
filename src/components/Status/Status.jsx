@@ -10,7 +10,7 @@ export default function Status() {
     dots: false,
     infinite: false,
     speed: 500,
-    slidesToShow: 2,
+    slidesToShow: 3,
     slidesToScroll: 3,
   };
 
@@ -23,7 +23,7 @@ export default function Status() {
   };
 
   return (
-    <Box position={"sticky"} p={5} h={"100px"} w={"650px"}>
+    <Box position={"sticky"} p={5}>
       <link
         rel="stylesheet"
         type="text/css"

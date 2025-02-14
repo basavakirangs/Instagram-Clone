@@ -8,9 +8,9 @@ export default function HomePage() {
     <Container maxW={"container.xl"}>
       <Flex gap={20}>
         <Flex flexDir={"column"}>
-          <Flex>
+          <Box maxW={{ base: "md", sm: "container.sm", md: "container.md" }}>
             <Status />
-          </Flex>
+          </Box>
           <Box flex={2} py={10}>
             <FeedPosts />
           </Box>
