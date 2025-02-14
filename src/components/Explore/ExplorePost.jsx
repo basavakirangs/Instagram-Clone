@@ -1,8 +1,40 @@
-import { Flex, GridItem, Image, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Button,
+  Divider,
+  Flex,
+  GridItem,
+  Image,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalOverlay,
+  Text,
+  useDisclosure,
+  VStack,
+} from "@chakra-ui/react";
 import { AiFillHeart } from "react-icons/ai";
 import { FaComment } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import PostFooter from "../FeedPosts/PostFooter";
+import Comment from "../Comment/Comment";
+import Caption from "../Comment/Caption";
+import userProfileStore from "../../Store/userProfileStore";
+import useAuthStore from "../../Store/authStore";
+import useShowToast from "../../Hooks/useShowToast";
+import { deleteObject, ref } from "firebase/storage";
+import { firestore, storage } from "../../Firebase/Firebase";
+import { arrayRemove, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { useState } from "react";
+import usePostStore from "../../Store/postStore";
 
 export default function ExplorePost({ post }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { userProfile } = userProfileStore();
+  const authUser = useAuthStore((state) => state.user);
+  const showToast = useShowToast();
+
   return (
     <>
       <GridItem
@@ -13,6 +45,7 @@ export default function ExplorePost({ post }) {
         borderColor={"whiteAlpha.300"}
         position={"relative"}
         aspectRatio={1 / 1}
+        onClick={onOpen}
       >
         <Flex
           opacity={0}
@@ -50,6 +83,61 @@ export default function ExplorePost({ post }) {
           objectFit={"cover"}
         />
       </GridItem>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        isCentered
+        size={{ base: "3xl", md: "5xl" }}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody bg={"black"} pb={5}>
+            <Flex
+              gap={4}
+              w={{ base: "90%", sm: "70%", md: "full" }}
+              mx={"auto"}
+              maxH={"90vh"}
+              minH={"50vh"}
+            >
+              <Flex
+                borderRadius={4}
+                overflow={"hidden"}
+                border={"1px solid"}
+                borderColor={"whiteAlpha.300"}
+                flex={1.5}
+                justifyContent={"center"}
+                alignItems={"center"}
+              >
+                <Image src={post.imageURL} alt="profile post" />
+              </Flex>
+
+              <Flex
+                flex={1}
+                flexDirection={"column"}
+                px={10}
+                display={{ base: "none", md: "flex" }}
+              >
+                <Divider my={4} bg={"gray.800"} />
+                <VStack
+                  w={"full"}
+                  alignItems={"start"}
+                  maxH={"350px"}
+                  overflowY={"auto"}
+                >
+                  {post.caption && <Caption post={post} />}
+                  {/* Comments */}
+                  {post.comments.map((comment, idx) => (
+                    <Comment key={idx} comment={comment} />
+                  ))}
+                </VStack>
+                <Divider my={4} bg={"gray.800"} />
+                <PostFooter isProfilePage={true} post={post} />
+              </Flex>
+            </Flex>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 }

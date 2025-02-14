@@ -1,12 +1,27 @@
-import { Box, Flex, Grid, Skeleton, Text, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Grid,
+  GridItem,
+  Skeleton,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import ProfilePost from "./ProfilePost";
 import useGetUserPosts from "../../Hooks/useGetUserPosts";
+import { FiPlus } from "react-icons/fi";
+import useAuthStore from "../../Store/authStore";
+import userProfileStore from "../../Store/userProfileStore";
 
 export default function ProfilePosts() {
   const { isLoading, posts } = useGetUserPosts();
+  const authUser = useAuthStore((state) => state.user);
+  const { userProfile } = userProfileStore();
 
   const noPostsFound = !isLoading && posts.length === 0;
   if (noPostsFound) return <NoPostsFound />;
+  if (!userProfile) return null;
+  if (!authUser) return null;
 
   return (
     <Grid
@@ -29,6 +44,27 @@ export default function ProfilePosts() {
           ))}
         </>
       )}
+      {authUser.uid === userProfile.uid ? (
+        <GridItem
+          cursor={"pointer"}
+          borderRadius={4}
+          overflow={"hidden"}
+          border={"1px solid"}
+          borderColor={"whiteAlpha.300"}
+          position={"relative"}
+          placeContent={"center"}
+          aspectRatio={1 / 1}
+        >
+          <Box
+            placeSelf={"center"}
+            bg={"whiteAlpha.700"}
+            borderRadius={2}
+            // onClick={""}
+          >
+            <FiPlus size={30} />
+          </Box>
+        </GridItem>
+      ) : null}
     </Grid>
   );
 }

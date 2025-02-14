@@ -22,8 +22,14 @@ export default function App() {
           element={!authUser ? <AuthPage /> : <Navigate to={"/"} />}
         />
         <Route path="/:username" element={<ProfilePage />} />
-        <Route path="/explore" element={<ExplorePage />} />
-        <Route path="reels" element={<ReelsPage />} />
+        <Route
+          path="/explore"
+          element={authUser ? <ExplorePage /> : <Navigate to={"/auth"} />}
+        />
+        <Route
+          path="reels"
+          element={authUser ? <ReelsPage /> : <Navigate to={"/auth"} />}
+        />
       </Routes>
     </PageLayout>
   );
