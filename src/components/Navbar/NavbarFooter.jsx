@@ -20,8 +20,8 @@ export default function NavbarFooter() {
       alignItems={"center"}
       justifyContent={"space-between"}
       gap={5}
-      pl={10}
-      pr={10}
+      pl={5}
+      pr={5}
       zIndex={"overlay"}
     >
       <Home />
